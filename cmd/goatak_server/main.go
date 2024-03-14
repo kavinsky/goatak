@@ -458,12 +458,17 @@ func (app *App) cleanOldUnits() {
 }
 
 func (app *App) SendBroadcast(msg *cot.CotMessage) {
+	app.logger.Debug(fmt.Sprintf("Broadcasting message to scope: %s", msg.Scope))
+
 	app.ForAllClients(func(ch client.ClientHandler) bool {
 		if !ch.GetUser().CanSeeScope(msg.Scope) {
 			return true
 		}
 
+		app.logger.Debug(fmt.Sprintf("-> broadcast to: %s", ch.GetName()))
+
 		if ch.GetName() != msg.From {
+			
 			if err := ch.SendMsg(msg); err != nil {
 				app.logger.Error(fmt.Sprintf("error sending to %s: %v", ch.GetName(), err))
 			}
