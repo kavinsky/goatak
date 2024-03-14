@@ -78,6 +78,11 @@ func (pm *PackageManager) Stop() {
 }
 
 func (pm *PackageManager) Store(uid string, pi *PackageInfo) {
+	previousPi := pm.Get(uid)
+	if previousPi != nil && previousPi.Tool == "public" {
+		pi.Tool = "public"
+	}
+
 	pm.data.Store(uid, pi)
 
 	if pm.noSave {

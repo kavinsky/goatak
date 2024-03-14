@@ -459,6 +459,10 @@ func (app *App) cleanOldUnits() {
 
 func (app *App) SendBroadcast(msg *cot.CotMessage) {
 	app.ForAllClients(func(ch client.ClientHandler) bool {
+		if !ch.GetUser().CanSeeScope(msg.Scope) {
+			return true
+		}
+
 		if ch.GetName() != msg.From {
 			if err := ch.SendMsg(msg); err != nil {
 				app.logger.Error(fmt.Sprintf("error sending to %s: %v", ch.GetName(), err))
