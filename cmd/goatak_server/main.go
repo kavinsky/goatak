@@ -458,7 +458,7 @@ func (app *App) cleanOldUnits() {
 }
 
 func (app *App) SendBroadcast(msg *cot.CotMessage) {
-	app.logger.Info(fmt.Sprintf("Broadcasting message to scope: %s", msg.Scope))
+	app.logger.Info(fmt.Sprintf("Broadcasting message from %s to scope: %s", msg.From, msg.Scope))
 
 	app.ForAllClients(func(ch client.ClientHandler) bool {
 		if !ch.GetUser().CanSeeScope(msg.Scope) {
